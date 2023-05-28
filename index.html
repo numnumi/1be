@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>게시판</title>
+  <style>
+    /* 게시판 스타일링을 위한 CSS */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .post {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>게시판</h1>
+    <form id="postForm">
+      <h2>새로운 게시물 작성</h2>
+      <input type="text" id="titleInput" placeholder="제목" required>
+      <textarea id="contentInput" placeholder="내용" required></textarea>
+      <input type="submit" value="제출">
+    </form>
+    <div id="postList">
+      <h2>게시물 목록</h2>
+    </div>
+  </div>
+
+  <script>
+    // 게시물 제출 시 처리
+    document.getElementById("postForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // 폼 제출 동작 중단
+
+      // 입력된 값 가져오기
+      var title = document.getElementById("titleInput").value;
+      var content = document.getElementById("contentInput").value;
+
+      // 게시물 요소 생성
+      var postElement = document.createElement("div");
+      postElement.classList.add("post");
+      postElement.innerHTML = "<h3>" + title + "</h3><p>" + content + "</p>";
+
+      // 게시물 목록에 추가
+      var postListElement = document.getElementById("postList");
+      postListElement.appendChild(postElement);
+
+      // 입력 필드 초기화
+      document.getElementById("titleInput").value = "";
+      document.getElementById("contentInput").value = "";
+    });
+  </script>
+</body>
+</html>
