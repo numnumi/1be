@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>게시판</title>
+  <title>갤러리</title>
   <style>
-    /* 게시판 스타일링을 위한 CSS */
+    /* 갤러리 스타일링을 위한 CSS */
     .container {
-      max-width: 600px;
+      max-width: 800px;
       margin: 0 auto;
       padding: 20px;
     }
@@ -15,62 +15,66 @@
     form {
       margin-bottom: 20px;
     }
-    input[type="text"],
-    textarea {
-      width: 100%;
-      padding: 10px;
+    input[type="file"] {
       margin-bottom: 10px;
     }
-    input[type="submit"] {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
     .post {
-      background-color: #f9f9f9;
       border: 1px solid #ddd;
       padding: 10px;
-      margin-bottom: 10px;
+      text-align: center;
+    }
+    .post img {
+      max-width: 100%;
+      max-height: 200px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>게시판</h1>
+    <h1>갤러리</h1>
     <form id="postForm">
-      <h2>새로운 게시물 작성</h2>
-      <input type="text" id="titleInput" placeholder="제목" required>
-      <textarea id="contentInput" placeholder="내용" required></textarea>
-      <input type="submit" value="제출">
+      <h2>게시물 업로드</h2>
+      <input type="file" id="imageInput" accept="image/*" required>
+      <textarea id="captionInput" placeholder="캡션" required></textarea>
+      <input type="submit" value="업로드">
     </form>
-    <div id="postList">
-      <h2>게시물 목록</h2>
-    </div>
+    <div class="gallery" id="postGallery"></div>
   </div>
 
   <script>
-    // 게시물 제출 시 처리
+    // 게시물 업로드 시 처리
     document.getElementById("postForm").addEventListener("submit", function(e) {
       e.preventDefault(); // 폼 제출 동작 중단
 
       // 입력된 값 가져오기
-      var title = document.getElementById("titleInput").value;
-      var content = document.getElementById("contentInput").value;
+      var image = document.getElementById("imageInput").files[0];
+      var caption = document.getElementById("captionInput").value;
 
-      // 게시물 요소 생성
-      var postElement = document.createElement("div");
-      postElement.classList.add("post");
-      postElement.innerHTML = "<h3>" + title + "</h3><p>" + content + "</p>";
+      // FileReader를 사용하여 이미지 파일을 읽고 미리보기 생성
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var imagePreview = document.createElement("img");
+        imagePreview.src = e.target.result;
 
-      // 게시물 목록에 추가
-      var postListElement = document.getElementById("postList");
-      postListElement.appendChild(postElement);
+        // 게시물 요소 생성
+        var postElement = document.createElement("div");
+        postElement.classList.add("post");
+        postElement.innerHTML = "<img src='" + e.target.result + "'><p>" + caption + "</p>";
 
-      // 입력 필드 초기화
-      document.getElementById("titleInput").value = "";
-      document.getElementById("contentInput").value = "";
+        // 게시물 갤러리에 추가
+        var postGalleryElement = document.getElementById("postGallery");
+        postGalleryElement.appendChild(postElement);
+
+        // 입력 필드 초기화
+        document.getElementById("imageInput").value = "";
+        document.getElementById("captionInput").value = "";
+      };
+      reader.readAsDataURL(image); // 이미지 파일을 Data URL로 읽기
     });
   </script>
 </body>
